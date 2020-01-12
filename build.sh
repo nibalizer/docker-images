@@ -8,16 +8,20 @@ do
         continue
     fi
     pushd ${dir}
-    docker build -t nibalizer/${dir} .
+    docker build --no-cache -t quay.io/nibalizer/${dir} .
     popd
 done
 
-echo "Pushing images"
+if [ -z $1 ]; then
+    echo "Cowardly refusing to push images"
+else
+    echo "Pushing images"
 
-for dir in *;
-do
-    if [ ! -d ${dir} ];then
-        continue
-    fi
-    docker push nibalizer/${dir}
-done
+    for dir in *;
+    do
+        if [ ! -d ${dir} ];then
+            continue
+        fi
+        docker push quay.io/nibalizer/${dir}
+    done
+fi
